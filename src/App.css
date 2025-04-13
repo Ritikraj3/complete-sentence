@@ -1,0 +1,24 @@
+@keyframes soft-blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  .animate-soft-blink-green {
+    animation: soft-blink 1s ease-in-out infinite;
+    background-color: #8effae;
+  }
+  
+  .animate-soft-blink-yellow {
+    animation: soft-blink 1s ease-in-out infinite;
+    background-color: #ffed92;
+  }
+  
+  .animate-soft-blink-red {
+    animation: soft-blink 1s ease-in-out infinite;
+    background-color: #ff9494;
+  }
+  

@@ -1,97 +1,130 @@
-import React, { useState } from 'react';
-import questionsData from '../sample.json';
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import questionsData from "../sample.json";
+import QuestionContainer from "./QuestionContainer";
 
 const QuestionList = () => {
-  const timer = '0:15';
-
   const questions = questionsData.data.questions;
-  const totalSteps = questions.length;
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [userAnswers, setUserAnswers] = useState([]); // 👈 NEW STATE
+  const [timer, setTimer] = useState(30);
+  const intervalRef = useRef(null);
+  const navigate = useNavigate();
 
   const currentQuestion = questions[currentQuestionIndex];
-  const progress = currentQuestionIndex + 1; // Dynamic progress
+  const blanks = (currentQuestion.question.match(/___/g) || []).length;
+
+  useEffect(() => {
+    setTimer(30);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(intervalRef.current);
+          handleNextQuestion(); // 👈 Auto-advance and collect answers
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalRef.current);
+  }, [currentQuestionIndex]);
 
   const handleOptionClick = (option) => {
-    if (selectedOptions.includes(option)) return;
-
-    const updatedSelections = [...selectedOptions, option];
+    // Play click sound
+    const clickSound = new Audio("/public/Audio/click-151673.mp3");
+    clickSound.play();
+  
+    const updatedSelections = selectedOptions.includes(option)
+      ? selectedOptions.filter((item) => item !== option)
+      : [...selectedOptions, option];
+  
     setSelectedOptions(updatedSelections);
+  };
+  
 
-    if (updatedSelections.length === 4) {
-      setTimeout(() => {
-        if (currentQuestionIndex + 1 < questions.length) {
-          setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-          setSelectedOptions([]);
-        }
-      }, 500);
+  const handleNextQuestion = () => {
+    const clickSound = new Audio("/public/Audio/ding-sound-246413.mp3");
+    clickSound.play();
+    const updatedUserAnswers = [...userAnswers];
+    updatedUserAnswers[currentQuestionIndex] = selectedOptions;
+    setUserAnswers(updatedUserAnswers);
+
+    if (currentQuestionIndex + 1 < questions.length) {
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      setSelectedOptions([]);
+      setTimer(30);
+    } else {
+      calculateAndNavigateToResult(updatedUserAnswers); // 👈 Final step
+      const clickSound = new Audio("/public/Audio/notification-21-270139.mp3");
+    clickSound.play();
     }
   };
 
+  const calculateAndNavigateToResult = (finalAnswers) => {
+    let correctCount = 0;
+
+    questions.forEach((q, i) => {
+      const isCorrect =
+        JSON.stringify(finalAnswers[i]) === JSON.stringify(q.correctAnswer);
+      if (isCorrect) correctCount += 1;
+    });
+
+    const finalScore = Math.round((correctCount / questions.length) * 100);
+
+    navigate("/ResultContainer", {
+      state: {
+        questions,
+        userAnswers: finalAnswers,
+        score: finalScore,
+      },
+    });
+  };
+
+  const handleQuit = () => {
+    navigate("/");
+  };
+
+  const renderQuestionWithBlanks = () => {
+    const parts = currentQuestion.question.split("___");
+    let filled = "";
+
+    for (let i = 0; i < parts.length; i++) {
+      filled += parts[i];
+      if (i < selectedOptions.length) {
+        filled += `<strong>${selectedOptions[i]}</strong>`;
+      } else if (i < blanks) {
+        filled += `<span style="padding: 0 6px; border-bottom: 1px solid #ccc;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`;
+      }
+    }
+
+    return filled;
+  };
+
+  const getBackgroundClass = () => {
+    if (timer > 20) return "animate-soft-blink-green";
+    if (timer > 10) return "animate-soft-blink-yellow";
+    return "animate-soft-blink-red";
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 flex flex-col items-center justify-start">
-      {/* Header */}
-      <div className="w-full max-w-3xl bg-white p-4 rounded-xl shadow mb-6">
-        <div className="flex justify-between items-center mb-3">
-          <span className="text-gray-800 font-semibold text-sm">{timer}</span>
-          <button className="text-sm font-medium px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-100 transition">
-            Quit
-          </button>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="flex items-center space-x-1">
-          {[...Array(totalSteps)].map((_, i) => (
-            <div
-              key={i}
-              className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                i < progress ? 'bg-yellow-400' : 'bg-gray-200'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Main Question Card */}
-      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-md p-6 sm:p-8">
-        <p className="text-sm text-gray-500 mb-2">
-          Question {currentQuestionIndex + 1} of {questions.length}
-        </p>
-
-        <h2 className="text-xl sm:text-2xl font-semibold text-center text-gray-700 mb-6">
-          Select the missing words in the correct order
-        </h2>
-
-        <p className="text-lg text-gray-800 leading-8 mb-6 text-center">
-          {currentQuestion.question}
-        </p>
-
-        {/* Option Buttons */}
-        <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          {currentQuestion.options.map((option, index) => (
-            <li key={index}>
-              <button
-                onClick={() => handleOptionClick(option)}
-                className={`w-full py-2 px-4 border rounded-md text-sm font-medium transition text-center ${
-                  selectedOptions.includes(option)
-                    ? 'bg-blue-100 text-blue-800 border-blue-300'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                {option}
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        {/* Selected Words */}
-        {selectedOptions.length > 0 && (
-          <div className="mb-2 text-center text-sm text-gray-600">
-            Selected: <span className="font-medium">{selectedOptions.join(', ')}</span>
-          </div>
-        )}
-      </div>
+    <div className="relative min-h-screen w-full overflow-hidden">
+      <div className={`absolute inset-0 z-0 ${getBackgroundClass()}`} />
+      <QuestionContainer
+        timer={timer}
+        onQuit={handleQuit}
+        currentIndex={currentQuestionIndex}
+        totalQuestions={questions.length}
+        questionHTML={renderQuestionWithBlanks()}
+        options={currentQuestion.options}
+        selectedOptions={selectedOptions}
+        onSelect={handleOptionClick}
+        showNextButton={selectedOptions.length === blanks}
+        onNext={handleNextQuestion}
+      />
     </div>
   );
 };

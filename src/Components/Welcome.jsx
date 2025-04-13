@@ -5,6 +5,8 @@ export default function Welcome() {
   const navigate = useNavigate();
   const handleStart = () => {
     navigate("/questionSet");
+    const clickSound = new Audio("/public/Audio/cinematic-intro-3-40041.mp3");
+    clickSound.play();
   };
 
   return (
