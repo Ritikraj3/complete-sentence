@@ -35,16 +35,15 @@ const QuestionList = () => {
 
   const handleOptionClick = (option) => {
     // Play click sound
-    const clickSound = new Audio("/public/Audio/click-151673.mp3");
+    const clickSound = new Audio("/Audio/click-151673.mp3");
     clickSound.play();
-  
+
     const updatedSelections = selectedOptions.includes(option)
       ? selectedOptions.filter((item) => item !== option)
       : [...selectedOptions, option];
-  
+
     setSelectedOptions(updatedSelections);
   };
-  
 
   const handleNextQuestion = () => {
     const clickSound = new Audio("/Audio/ding-sound-246413.mp3");
@@ -60,7 +59,7 @@ const QuestionList = () => {
     } else {
       calculateAndNavigateToResult(updatedUserAnswers); // 👈 Final step
       const clickSound = new Audio("/Audio/notification-21-270139.mp3");
-    clickSound.play();
+      clickSound.play();
     }
   };
 
