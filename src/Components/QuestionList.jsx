@@ -47,7 +47,7 @@ const QuestionList = () => {
   
 
   const handleNextQuestion = () => {
-    const clickSound = new Audio("/public/Audio/ding-sound-246413.mp3");
+    const clickSound = new Audio("/Audio/ding-sound-246413.mp3");
     clickSound.play();
     const updatedUserAnswers = [...userAnswers];
     updatedUserAnswers[currentQuestionIndex] = selectedOptions;
@@ -59,7 +59,7 @@ const QuestionList = () => {
       setTimer(30);
     } else {
       calculateAndNavigateToResult(updatedUserAnswers); // 👈 Final step
-      const clickSound = new Audio("/public/Audio/notification-21-270139.mp3");
+      const clickSound = new Audio("/Audio/notification-21-270139.mp3");
     clickSound.play();
     }
   };
