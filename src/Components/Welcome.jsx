@@ -22,7 +22,7 @@ export default function Welcome() {
         </p>
       </div>
 
-      {/* Stats */}
+
       <div className="flex flex-col sm:flex-row gap-6 mt-10 text-center text-sm text-gray-700">
         <div>
           <p className="font-medium">Time Per Question</p>
@@ -43,7 +43,7 @@ export default function Welcome() {
         </div>
       </div>
 
-      {/* Buttons */}
+
       <div className="mt-10 flex gap-4">
         <button className="px-6 py-2 border-2 border-indigo-600 text-indigo-600 rounded-md hover:bg-indigo-50">
           Back

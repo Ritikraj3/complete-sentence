@@ -7,7 +7,7 @@ const QuestionList = () => {
   const questions = questionsData.data.questions;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [userAnswers, setUserAnswers] = useState([]); // 👈 NEW STATE
+  const [userAnswers, setUserAnswers] = useState([]); 
   const [timer, setTimer] = useState(30);
   const intervalRef = useRef(null);
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const QuestionList = () => {
       setTimer((prev) => {
         if (prev <= 1) {
           clearInterval(intervalRef.current);
-          handleNextQuestion(); // 👈 Auto-advance and collect answers
+          handleNextQuestion(); 
           return 0;
         }
         return prev - 1;
@@ -57,7 +57,7 @@ const QuestionList = () => {
       setSelectedOptions([]);
       setTimer(30);
     } else {
-      calculateAndNavigateToResult(updatedUserAnswers); // 👈 Final step
+      calculateAndNavigateToResult(updatedUserAnswers); 
       const clickSound = new Audio("/Audio/notification-21-270139.mp3");
       clickSound.play();
     }
