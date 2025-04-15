@@ -7,7 +7,7 @@ const QuestionList = () => {
   const questions = questionsData.data.questions;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [userAnswers, setUserAnswers] = useState([]); 
+  const [userAnswers, setUserAnswers] = useState([]);
   const [timer, setTimer] = useState(30);
   const intervalRef = useRef(null);
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const QuestionList = () => {
       setTimer((prev) => {
         if (prev <= 1) {
           clearInterval(intervalRef.current);
-          handleNextQuestion(); 
+          handleNextQuestion();
           return 0;
         }
         return prev - 1;
@@ -57,7 +57,7 @@ const QuestionList = () => {
       setSelectedOptions([]);
       setTimer(30);
     } else {
-      calculateAndNavigateToResult(updatedUserAnswers); 
+      calculateAndNavigateToResult(updatedUserAnswers);
       const clickSound = new Audio("/Audio/notification-21-270139.mp3");
       clickSound.play();
     }
@@ -96,7 +96,7 @@ const QuestionList = () => {
       if (i < selectedOptions.length) {
         filled += `<strong>${selectedOptions[i]}</strong>`;
       } else if (i < blanks) {
-        filled += `<span style="padding: 0 6px; border-bottom: 1px solid #ccc;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`;
+        filled += `<span style="padding: 0 6px; border-bottom: 3px solid darkgray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</span>`;
       }
     }
 
