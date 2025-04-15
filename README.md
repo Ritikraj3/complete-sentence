@@ -1,36 +1,166 @@
 
 > # _All about QuestionPage._
 
-## OVERALL FLOW (HIGH-LEVEL)
 
-- Fetches questions from a JSON file.
+# Overview
 
-- Renders one question at a time.
-
-- Allows selecting options to fill in blanks.
-
-- Uses a countdown timer for each question.
-
-- Navigates to a Result page on completion.
----
-
-## 🧩 Component Tree Overview (Flow)
-
-```
-App.jsx
- └── <Routes>
-      └── /quiz
-           └── QuestionSet
-                └── QuestionList
-                     └── QuestionContainer
-                          ├── QuestionTimer
-                          ├── ProgressBar
-                          ├── QuestionDisplay
-                          ├── OptionList
-                          └── NextButton
-```
+A dynamic and interactive **Quiz Application** built using **React.js**. This app supports various question formats, real-time score tracking, a timer, and beautifully styled result screens. Ideal for testing knowledge and creating engaging quiz challenges!
 
 ---
+
+## 🚀 Demo
+
+[![Quiz App Demo](https://img.shields.io/badge/Demo-Click%20Here-blue?style=for-the-badge&logo=vercel)](https://correctsentence.netlify.app/)
+
+---
+
+## 🛠️ Tech Stack
+
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+
+
+---
+
+## 📁 Project Structure
+
+```
+quiz-app/
+│
+├── index.html
+├── App.jsx
+├── index.js
+├── data.js
+│
+├── components/
+│   ├── Header.jsx
+│   ├── QuestionList.jsx
+│   ├── Question.jsx
+│   ├── Options.jsx
+│   ├── Timer.jsx
+│   ├── ProgressBar.jsx
+│   ├── NextButton.jsx
+│   ├── ResultComponent.jsx
+│
+└── styles/
+    └── style.css
+```
+
+---
+
+## ✨ Features
+
+✅ Multiple choice and fill-in-the-blank question support  
+✅ Interactive options with immediate feedback  
+✅ Timer countdown per question  
+✅ Result summary at the end  
+✅ Dynamic progress bar  
+✅ Responsive design and clean UI
+
+---
+
+## 📸 Screenshots
+
+### 🔹 Home / Start Screen
+![Home Screen](/mnt/data/{4B47D4F4-D4C9-4598-974E-ADEFFA280B8F}.png)
+
+### 🔹 Question Page
+![Question Page](/mnt/data/{CFE476DD-C98B-4587-850B-E749CB841E50}.png)
+
+### 🔹 Result Page
+![Result Page](/mnt/data/{DDB7B205-502B-46F8-9E6B-7516C1932B6E}.png)
+
+---
+
+## 🧩 Component Overview
+
+### 🔹 `App.jsx`
+Handles the quiz logic and manages states like:
+- `index` for tracking current question
+- `points` to store score
+- `status` for tracking quiz progress (`ready`, `active`, `finished`)
+- `selectedAnswer`, `isCorrect`, `secondsRemaining`, and others
+
+### 🔹 `Header.jsx`
+Displays the quiz title.
+
+### 🔹 `QuestionList.jsx`
+Responsible for:
+- Rendering questions
+- Handling answer validation
+- Managing timer logic
+- Moving to the next question
+
+### 🔹 `Question.jsx`
+Displays the current question text and passes data to `Options`.
+
+### 🔹 `Options.jsx`
+Shows all possible answers and highlights the selected one.
+Also validates if the selected option is correct or not.
+
+### 🔹 `NextButton.jsx`
+Navigates to the next question or result screen.
+
+### 🔹 `ProgressBar.jsx`
+Dynamically visualizes how far the user has progressed through the quiz.
+
+### 🔹 `Timer.jsx`
+Displays a countdown and changes color near timeout for urgency.
+
+### 🔹 `ResultComponent.jsx`
+Final result screen showing:
+- Total correct answers
+- Score with animated number counter
+- Performance emojis based on score
+- Restart button
+
+---
+
+## 🧠 Logic Highlights
+
+- **Scoring System:** Adds points only when correct answer is selected.
+- **Timer Countdown:** Deducts time using `setInterval`, and auto-submits when time runs out.
+- **Blank Question Detection:** Checks for `question.includes("___")` to render input field.
+- **Answer Matching:** Trims and lowercases input for accurate comparison.
+
+---
+
+## 🧪 Sample Question Format (in `data.js`)
+
+```js
+{
+  question: "JavaScript is a ___ language?",
+  options: ["Functional", "Object-Oriented", "Procedural", "All of the above"],
+  correctOption: 3
+}
+```
+
+---
+
+## 💡 How to Use / Run Locally
+
+```bash
+git clone https://github.com/your-username/quiz-app.git
+cd quiz-app
+npm install
+npm run start
+```
+
+---
+
+## 🎯 Future Improvements
+
+- Add categories and difficulty levels
+- Backend support for storing questions
+- User authentication and history tracking
+- Animations and transition enhancements
+
+---
+
+
 
 ## 1️⃣ **QuestionSet.jsx**
 
